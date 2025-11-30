@@ -80,3 +80,4 @@ git clone https://github.com/paracyite/job_tools.git
 cd job_tools
 cp configuration_example.txt configuration.txt
 # ← edit with your real info (this file stays private)
+# history cleaned
