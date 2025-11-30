@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+set -euo pipefail   # good practice anyway
+
+
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/job_tools"
+
+mkdir -p "$CONFIG_DIR"
+
+
+CONFIG_FILE="$CONFIG_DIR/configuration.txt"
+DATA_FILE="$CONFIG_DIR/data.txt"
+DESTINATION="$HOME/Documents/JOB_APPLICATIONS" 
+mkdir -p "$DESTINATION"
+
+
+source "$CONFIG_FILE"
+source "$DATA_FILE"
+
+ROLE_CLEAN=$(echo "$APPLIED_ROLE" | tr '[:lower:]' '[:upper:]' | tr -s ' ' '_')
+RESUME_NAME="${NAME_FIRST}_${NAME_LAST}_${ROLE_CLEAN}.md"
+
+FILE=$DESTINATION/$RESUME_NAME
+
+echo "Generating Resume" 
+
+cat > "$FILE" << EOF
+# ${NAME_FIRST} ${NAME_LAST} 
+<div class="contacts"> 
+${CITY},${STATE} • ${PHONE} • ${EMAIL} 
+</div>
+
+## Professional Experience
+
+**${CURRENT_JOB_POSITION}**
+${CURRENT_JOB} - ${CURRENT_JOB_CITY},${CURRENT_JOB_STATE}   ${CURRENT_START_YEAR}-${CURRENT_END_YEAR}
+<div class ="bullets">
+<ul>
+<li>${CURRENT_JOB_BULLET_ONE}  </li> 
+<li>${CURRENT_JOB_BULLET_TWO}  </li>
+<li>${CURRENT_JOB_BULLET_THREE}  </li>
+</ul>
+</div> 
+
+
+**${SECOND_JOB_POSITION}**
+${SECOND_JOB} - ${SECOND_JOB_CITY},${SECOND_JOB_STATE}   ${SECOND_START_YEAR}-${SECOND_END_YEAR}
+<div class="bullets"> 
+<ul> 
+<li>${SECOND_JOB_BULLET_ONE}</li>
+<li> ${SECOND_JOB_BULLET_TWO}</li>
+<li>${SECOND_JOB_BULLET_THREE}</li> 
+</ul> 
+</div> 
+**${THIRD_JOB_POSITION}**
+${THIRD_JOB} - ${THIRD_JOB_CITY},${THIRD_JOB_STATE}   ${THIRD_START_YEAR}-${THIRD_END_YEAR}
+<div class="bullets">
+<ul>
+<li>${THIRD_JOB_BULLET_ONE}</li>
+<li>${THIRD_JOB_BULLET_TWO}</li>
+<li>${THIRD_JOB_BULLET_THREE}</li>
+</ul>
+</div> 
+## Education & Relevant Coursework
+${HSEDU} - ${HIGHSCHOOL} ${HSGRADYEAR} 
+${HSRELCOURSEWORK}
+
+
+
+## Technical Skills & Strengths
+<div class="bullets"> 
+<ul>
+<li>${SKILLS_TECH} </li>
+<li>${SKILLS_LOGISTICS}  </li>
+<li>${SKILLS_FABRICATION}  </li>
+</div>
+
+
+EOF
+
+
+echo Resume complete!
+echo showing ${RESUME_NAME}
+cat $FILE

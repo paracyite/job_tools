@@ -1,0 +1,77 @@
+#!/usr/bin/env bash 
+
+set -euo pipefail
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/job_tools" 
+CONFIG_FILE="$CONFIG_DIR/configuration.txt" 
+DATA_FILE="$CONFIG_DIR/data.txt"
+
+source "$CONFIG_FILE"
+source "$DATA_FILE"
+
+
+
+
+
+DESTINATION="$HOME/Documents/JOB_APPLICATIONS"
+ROLE_CLEANED=$(echo "$APPLIED_ROLE" | tr -s ' ' '_') 
+cover_letter="${NAME_FIRST}_${NAME_LAST}_${ROLE_CLEANED}_Cover_Letter.md" 
+
+
+FILE="$DESTINATION/$cover_letter"
+mkdir -p $DESTINATION
+
+
+
+log_file="Job_Log.txt"
+
+
+TODAY=$(date "+%B %d, %Y")
+HIRING_MANAGER="${HIRING_MANAGER:-Hiring Manager}" 
+
+
+echo "Generating cover letter" 
+cat > "$FILE" << EOL 
+
+${NAME_FIRST} ${NAME_LAST} 
+${ADDRESS} 
+${CITY} ${STATE} 
+
+${TODAY}
+
+${COMPANY}
+${COMPANY_ADDRESS}
+${COMPANY_CITY} ${COMPANY_STATE} 
+
+Dear ${HIRING_MANAGER},
+
+I am writing to express my interest in the ${APPLIED_ROLE} role at ${COMPANY}. 
+With my current experience as ${CURRENT_JOB}, and previous roles at ${SECOND_JOB}, and ${THIRD_JOB}, I bring a strong background in ${SKILLS_SOFT}.
+
+
+This mix gives me several strengths I’m excited to bring to ${COMPANY}:
+  ${BULLET_ONE}.
+  ${BULLET_TWO}.
+  ${BULLET_THREE}. 
+  ${BULLET_FOUR}. 
+
+I’m particularly drawn to this position because ${COMPANY}  ${COMPANY_FACT}.
+
+
+Thank you for your time and consideration. I would welcome the chance to discuss how my unusual blend of logistics, technical, and fabrication experience can contribute to your team’s success.
+
+
+
+Sincerely,
+
+${NAME_FIRST} ${NAME_LAST}
+EOL
+
+cat "$FILE"
+
+
+cat >> $log_file << EOL
+${COMPANY} ${APPLIED_ROLE} ${TODAY}
+EOL
+echo Entry Logged
+
+

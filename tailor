@@ -1,0 +1,30 @@
+#!/usr/bin/env bash 
+
+
+set -euo pipefail 
+
+DATA_FILE="${XDG_CONFIG_HOME:-&HOME/.config}/job_tools/data.txt"
+CONFIG_FILE="${XDG_CONFIG_HOME:-&HOME/.config}/job_tools/configuration.txt"
+
+echo "Tailor Mode" 
+echo "Edit the ${DATA_FILE} for a tailored experiece"
+
+echo 
+
+
+
+#Neovim is my editor of choice, feel free to edit this line and use your favorite editor
+"${EDITOR:-nvim}" "&DATA_FILE"
+
+echo "Generating resume" 
+
+source $"CONFIG_FILE" 
+source $"DATA_FILE" 
+
+
+~/Bash/job_tools/resumeWrite
+~/Bash/job_tools/CoverGen
+
+
+
+echo "Done, Enjoy" 

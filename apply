@@ -1,0 +1,40 @@
+#!/usr/bin/env bash 
+
+set -euo pipefail 
+CONFIG_DIR=${XDG_CONFIG_HOME:-$HOME/.config}/job_tools
+CONFIG_FILE=${CONFIG_DIR}/configuration.txt
+DATA_FILE=${CONFIG_DIR}/data.txt
+
+DESTINATION="${HOME}/Documents/JOB_APPLICATIONS"
+
+mkdir -p "${DESTINATION}"
+
+
+
+source "${CONFIG_FILE}" 
+
+
+
+
+ if [[ $# -ge 1 ]]; then
+{ 
+	echo "COMPANY=\"$1\""
+	echo "APPLIED_ROLE=\"$2\""
+	echo "COMPANY_ADDRESS=\"$3\""
+    	echo "COMPANY_CITY=\"$4\""
+    	echo "COMPANY_STATE=\"$5\""
+    	echo "COMPANY_FACT=\"$6\""
+    	echo "HIRING_MANAGER=\"${7:-Hiring Manager}\""
+}  > "${DATA_FILE}.new"
+fi
+
+
+[[ -f "$DATA_FILE" ]] && grep -v -E '^(COMPANY|APPLIED_ROLE|COMPANY_ADDRESS|COMPANY_CITY|COMPANY_STATE|COMPANY_FACT|HIRING_MANAGER)=' "$DATA_FILE" >> "${DATA_FILE}.new"
+
+mv "${DATA_FILE}.new" "${DATA_FILE}"
+
+source "${DATA_FILE}" 
+
+~/Bash/job_tools/resumeWrite
+~/Bash/job_tools/CoverGen
+
