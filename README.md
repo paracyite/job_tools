@@ -35,7 +35,8 @@ All information is directly linked to these two sheets.
 
 ## There are two ways this program generates a cover letter / resume duo 
 
-- apply : 
+### apply
+
 Apply takes command line arguments 
 
 - Company 
@@ -48,7 +49,8 @@ Apply takes command line arguments
 
 **Use this mode for mass application** 
 
-- tailor 
+### tailor
+
 This mode opens up an editor of your choose (default is nvim) and allows you to manually configure data.txt
 
 (Old system was opening up **data.txt**, navigating to the project folder then running **resumeWrite** 
