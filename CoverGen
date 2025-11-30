@@ -13,7 +13,7 @@ source "$DATA_FILE"
 
 
 DESTINATION="$HOME/Documents/JOB_APPLICATIONS"
-ROLE_CLEANED=$(echo "$APPLIED_ROLE" | tr -s ' ' '_') 
+ROLE_CLEANED=$(echo "$APPLIED_ROLE" |tr "[:lower]" "[:upper:]" | tr -s ' ' '_') 
 cover_letter="${NAME_FIRST}_${NAME_LAST}_${ROLE_CLEANED}_Cover_Letter.md" 
 
 
