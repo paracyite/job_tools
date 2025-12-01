@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail   # good practice anyway
+set -eo pipefail   # good practice anyway
 
 
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/job_tools"
@@ -27,54 +27,55 @@ echo "Generating Resume"
 cat > "$FILE" << EOF
 # ${NAME_FIRST} ${NAME_LAST} 
 <div class="contacts"> 
-${CITY},${STATE} • ${PHONE} • ${EMAIL} 
+${CITY}, ${STATE} • ${PHONE} • ${EMAIL} 
 </div>
+
+##
+${SUMMARY} 
+
 
 ## Professional Experience
 
 **${CURRENT_JOB_POSITION}**
-${CURRENT_JOB} - ${CURRENT_JOB_CITY},${CURRENT_JOB_STATE}   ${CURRENT_START_YEAR}-${CURRENT_END_YEAR}
-<div class ="bullets">
-<ul>
-<li>${CURRENT_JOB_BULLET_ONE}  </li> 
-<li>${CURRENT_JOB_BULLET_TWO}  </li>
-<li>${CURRENT_JOB_BULLET_THREE}  </li>
-</ul>
-</div> 
+${CURRENT_JOB} - ${CURRENT_JOB_CITY}, ${CURRENT_JOB_STATE}   ${CURRENT_START_YEAR}-${CURRENT_END_YEAR}
+
+
+
+- ${CURRENT_JOB_BULLET_ONE}
+- ${CURRENT_JOB_BULLET_TWO}
+- ${CURRENT_JOB_BULLET_THREE}  
+
 
 
 **${SECOND_JOB_POSITION}**
-${SECOND_JOB} - ${SECOND_JOB_CITY},${SECOND_JOB_STATE}   ${SECOND_START_YEAR}-${SECOND_END_YEAR}
-<div class="bullets"> 
-<ul> 
-<li>${SECOND_JOB_BULLET_ONE}</li>
-<li> ${SECOND_JOB_BULLET_TWO}</li>
-<li>${SECOND_JOB_BULLET_THREE}</li> 
-</ul> 
-</div> 
+${SECOND_JOB} - ${SECOND_JOB_CITY}, ${SECOND_JOB_STATE}   ${SECOND_START_YEAR}-${SECOND_END_YEAR}
+
+
+
+- ${SECOND_JOB_BULLET_ONE}
+- ${SECOND_JOB_BULLET_TWO}
+- ${SECOND_JOB_BULLET_THREE}
+
 **${THIRD_JOB_POSITION}**
-${THIRD_JOB} - ${THIRD_JOB_CITY},${THIRD_JOB_STATE}   ${THIRD_START_YEAR}-${THIRD_END_YEAR}
-<div class="bullets">
-<ul>
-<li>${THIRD_JOB_BULLET_ONE}</li>
-<li>${THIRD_JOB_BULLET_TWO}</li>
-<li>${THIRD_JOB_BULLET_THREE}</li>
-</ul>
-</div> 
+${THIRD_JOB} - ${THIRD_JOB_CITY}, ${THIRD_JOB_STATE}   ${THIRD_START_YEAR}-${THIRD_END_YEAR}
+
+
+- ${THIRD_JOB_BULLET_ONE}
+- ${THIRD_JOB_BULLET_TWO}
+- ${THIRD_JOB_BULLET_THREE}
+
+
 ## Education & Relevant Coursework
-${HSEDU} - ${HIGHSCHOOL} ${HSGRADYEAR} 
-${HSRELCOURSEWORK}
+${HSEDU} - ${HIGHSCHOOL} - ${HSGRADYEAR} 
 
-
+**Relevent Coursework:** ${HSRELCOURSEWORK}
 
 ## Technical Skills & Strengths
-<div class="bullets"> 
-<ul>
-<li>${SKILLS_TECH} </li>
-<li>${SKILLS_LOGISTICS}  </li>
-<li>${SKILLS_FABRICATION}  </li>
-</div>
 
+- ${SKILLS_TECH}
+- ${SKILLS_LOGISTICS}
+- ${SKILLS_FABRICATION}
+- ${SKILLS_SOFT}
 
 EOF
 
@@ -82,3 +83,7 @@ EOF
 echo Resume complete!
 echo showing ${RESUME_NAME}
 cat $FILE
+echo -e "\nQuick sanity check:"
+echo "Blank lines before <ul> tags:"
+grep -c -A 2 '<ul>' "$FILE" | cat -A   # shows $ and blank lines
+echo "Ghost-bullet risk: $(tail -20 "$FILE" | grep -c '^$')" blank lines at end

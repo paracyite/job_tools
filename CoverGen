@@ -13,7 +13,7 @@ source "$DATA_FILE"
 
 
 DESTINATION="$HOME/Documents/JOB_APPLICATIONS"
-ROLE_CLEANED=$(echo "$APPLIED_ROLE" |tr "[:lower]" "[:upper:]" | tr -s ' ' '_') 
+ROLE_CLEANED=$(echo "$APPLIED_ROLE" |tr "[:lower:]" "[:upper:]" | tr -s ' ' '_') 
 cover_letter="${NAME_FIRST}_${NAME_LAST}_${ROLE_CLEANED}_Cover_Letter.md" 
 
 
@@ -32,9 +32,15 @@ HIRING_MANAGER="${HIRING_MANAGER:-Hiring Manager}"
 echo "Generating cover letter" 
 cat > "$FILE" << EOL 
 
-${NAME_FIRST} ${NAME_LAST} 
-${ADDRESS} 
-${CITY} ${STATE} 
+
+
+
+
+${NAME_FIRST} ${NAME_LAST}
+
+${ADDRESS}
+
+${CITY} ${STATE}
 
 ${TODAY}
 
@@ -49,10 +55,14 @@ With my current experience as ${CURRENT_JOB}, and previous roles at ${SECOND_JOB
 
 
 This mix gives me several strengths I’m excited to bring to ${COMPANY}:
-  ${BULLET_ONE}.
-  ${BULLET_TWO}.
-  ${BULLET_THREE}. 
-  ${BULLET_FOUR}. 
+  
+- ${BULLET_ONE}.
+ 
+- ${BULLET_TWO}.
+  
+- ${BULLET_THREE}. 
+  
+- ${BULLET_FOUR}. 
 
 I’m particularly drawn to this position because ${COMPANY}  ${COMPANY_FACT}.
 
