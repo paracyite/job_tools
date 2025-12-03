@@ -1,39 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/job_tools"
-DATA_FILE="$CONFIG_DIR/data.txt"
-CONFIG_FILE="$CONFIG_DIR/configuration.txt"
-
-clear
-echo "======================================"
-echo "           TAILOR MODE              "
-echo "======================================"
-echo
-echo "Opening $DATA_FILE for tailoring..."
-echo "→ Edit bullets, company fact, role, etc."
-echo "→ Save and quit when ready (:wq)"
-echo
-
-# Open editor — blocks until you close it
+DATA_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/job_tools/data.txt"
 "${EDITOR:-nvim}" "$DATA_FILE"
 
-echo
-echo "Tailoring complete. Generating application..."
-
-# Fresh load of everything you just edited
-source "$CONFIG_FILE"
+echo "Generating resume + cover letter..."
+source "${XDG_CONFIG_HOME:-$HOME/.config}/job_tools/configuration.txt"
 source "$DATA_FILE"
 
-# Generate both documents
-~/Bash/job_tools/resumeWrite   && echo "Resume generated"
-~/Bash/job_tools/CoverGen      && echo "Cover letter generated"
+~/Bash/job_tools/resumeWrite && echo "Resume: OK"
+~/Bash/job_tools/CoverGen    && echo "Cover Letter: OK"
+~/Bash/job_tools/to-pdf      && echo "PDFs: OK"
 
-# Convert to PDF
-~/Bash/job_tools/to-pdf        && echo "PDFs created"
-
-echo
 echo "DONE — Your perfectly tailored application is ready:"
-ls -1tr ~/Documents/JOB_APPLICATIONS/Louis_Pantuso_*_{Resume,Cover_Letter}.pdf 2>/dev/null | tail -2 | sed 's/^/   /'
-echo
-echo "Attach and send. You're dangerous now."
+ls -1tr ~/Documents/JOB_APPLICATIONS/Louis_Pantuso_*_*.pdf 2>/dev/null | tail -2 | sed 's/^/   /'

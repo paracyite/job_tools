@@ -1,0 +1,56 @@
+
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=0.5in]{geometry}   % ← was 0.55in → now 0.5in (adds ~12 lines)
+\usepackage{fontspec}
+\setmainfont{Arial}
+\usepackage{parskip}
+\setlength{\parskip}{4pt}             % ← was 6pt → now 4pt (tighter but still readable)
+
+% ─── HEADING (text above line) ───
+\newcommand{\heading}[1]{%
+  \vspace{14pt}                       % ← reduced from 20pt
+  \begin{center}
+    {\LARGE\bfseries\MakeUppercase{#1}\par}
+    \vspace{6pt}                      % ← reduced from 8pt
+    \hrule
+    \vspace{10pt}                     % ← reduced from 14pt
+  \end{center}
+}
+
+% ─── JOB TITLE ───
+\newcommand{\jobtitle}[1]{%
+  \vspace{6pt}{\large\bfseries #1\par}\vspace{2pt}   % ← tighter
+}
+
+% ─── BULLETS – a hair tighter but still beautiful ───
+\usepackage{enumitem}
+\setlist[itemize]{
+    leftmargin=26pt,
+    label={\textbullet},
+    topsep=2pt,        % ← was 4pt
+    itemsep=2pt,       % ← was 3pt
+    parsep=0pt,
+    before=\vspace{1pt},
+    after=\vspace{4pt}
+}
+
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries $name$}\\[8pt]        % ← was 10pt
+  {\large $address$ \quad\textbullet\quad $phone$ \quad\textbullet\quad $email$}
+\end{center}
+
+\vspace{16pt}                            % ← was 20pt
+
+$if(summary)$
+$summary$
+\vspace{12pt}                           % ← was 16pt
+$endif$
+
+$body$
+
+\end{document}

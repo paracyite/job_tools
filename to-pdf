@@ -1,38 +1,38 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 
-CSS="$HOME/.config/job_tools/Templates/resumecss.css"
-DEST="$HOME/Documents/JOB_APPLICATIONS"
+cd "$HOME/Documents/JOB_APPLICATIONS"
 
-source ~/.config/job_tools/configuration.txt
-source ~/.config/job_tools/data.txt
-cd "$DEST"
+source "$HOME/.config/job_tools/configuration.txt"
+source "$HOME/.config/job_tools/data.txt"
 
-ROLE=$(echo "$APPLIED_ROLE" | tr '[:lower:]' '[:upper:]' | tr -s ' ' '_')
+# Your resumeWrite uses UPPERCASE role
+ROLE_UPPER=$(echo "${APPLIED_ROLE:-Generic}" | tr '[:lower:]' '[:upper:]' | tr -s ' ' '_')
 
-# Find the actual files — no tricks
-RESUME_MD=$(ls Louis_Pantuso_*.md 2>/dev/null | grep -iv cover | head -n1)
-COVER_MD=$(ls Louis_Pantuso_*.md 2>/dev/null | grep -i cover  | head -n1)
+# Your CoverGen uses lowercase role
+ROLE_LOWER=$(echo "${APPLIED_ROLE:-Generic}" | tr '[:upper:]' '[:lower:]' | tr -s ' ' '_')
 
-echo "Role → $ROLE"
-echo "Resume  → $RESUME_MD"
-echo "Cover   → $COVER_MD"
-echo
+# Exact filenames your two scripts actually create
+RESUME_MD="${NAME_FIRST}_${NAME_LAST}_${ROLE_UPPER}.md"
+COVER_MD="${NAME_FIRST}_${NAME_LAST}_${ROLE_LOWER}_Cover_Letter.md"
 
-# RESUME — perfect as always
-[[ -n "$RESUME_MD" ]] && {
-    echo "Generating Resume..."
-    pandoc "$RESUME_MD" --css="$CSS" --pdf-engine=weasyprint \
-        -o "Louis_Pantuso_${ROLE}_Resume.pdf" && echo "Resume: DONE"
-}
+RESUME_PDF="${NAME_FIRST}_${NAME_LAST}_${ROLE_UPPER}_Resume.pdf"
+COVER_PDF="${NAME_FIRST}_${NAME_LAST}_${ROLE_LOWER}_Cover_Letter.pdf"
 
-# COVER LETTER — just convert the already-perfect markdown
-[[ -n "$COVER_MD" ]] && {
-    echo "Generating Cover Letter..."
-    pandoc "$COVER_MD" --standalone --css="$CSS" --pdf-engine=weasyprint \
-        -o "Louis_Pantuso_${ROLE}_Cover_Letter.pdf" && echo "Cover Letter: DONE"
-}
+# Regenerate fresh files
+~/Bash/job_tools/resumeWrite
+~/Bash/job_tools/CoverGen
 
-echo
-echo "FINISHED — both PDFs perfect and up-to-date:"
-ls -lt Louis_Pantuso_*_Resume.pdf Louis_Pantuso_*_Cover_Letter.pdf 2>/dev/null | head -5
+# Compile — full paths, no tricks
+pandoc "$RESUME_MD" \
+    --template="$HOME/.config/job_tools/Templates/resume.tex" \
+    --pdf-engine=xelatex \
+    -o "$RESUME_PDF"
+
+pandoc "$COVER_MD" \
+    --template="$HOME/.config/job_tools/Templates/cover-letter.tex" \
+    --pdf-engine=xelatex \
+    -o "$COVER_PDF"
+
+echo "DONE — PDFs created:"
+ls -lh "$RESUME_PDF" "$COVER_PDF"

@@ -1,87 +1,52 @@
-#!/usr/bin/env bash 
-
+#!/bin/bash
 set -euo pipefail
-CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/job_tools" 
-CONFIG_FILE="$CONFIG_DIR/configuration.txt" 
-DATA_FILE="$CONFIG_DIR/data.txt"
 
-source "$CONFIG_FILE"
-source "$DATA_FILE"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/job_tools"
+source "$CONFIG_DIR/configuration.txt"
+source "$CONFIG_DIR/data.txt"
 
-
-
-
-
-DESTINATION="$HOME/Documents/JOB_APPLICATIONS"
-ROLE_CLEANED=$(echo "$APPLIED_ROLE" |tr "[:lower:]" "[:upper:]" | tr -s ' ' '_') 
-cover_letter="${NAME_FIRST}_${NAME_LAST}_${ROLE_CLEANED}_Cover_Letter.md" 
-
-
-FILE="$DESTINATION/$cover_letter"
-mkdir -p $DESTINATION
-
-
-
-log_file="Job_Log.txt"
-
+DEST="$HOME/Documents/JOB_APPLICATIONS"
+ROLE_LOWER=$(echo "$APPLIED_ROLE" | tr '[:upper:]' '[:lower:]' | tr -s ' ' '_')
+FILE="$DEST/${NAME_FIRST}_${NAME_LAST}_${ROLE_LOWER}_Cover_Letter.md"
 
 TODAY=$(date "+%B %d, %Y")
-HIRING_MANAGER="${HIRING_MANAGER:-Hiring Manager}" 
+HM="${HIRING_MANAGER:-Hiring Manager}"
 
-
-echo "Generating cover letter" 
-cat > "$FILE" << EOL 
-
-
-
-
+cat > "$FILE" << EOF
 
 ${NAME_FIRST} ${NAME_LAST}
 
 ${ADDRESS}
+${CITY}, ${STATE}
 
-${CITY} ${STATE}
+${PHONE}|${EMAIL}
 
-${TODAY}
+$TODAY
 
-${COMPANY}
-${COMPANY_ADDRESS}
-${COMPANY_CITY} ${COMPANY_STATE} 
+$COMPANY
+$COMPANY_ADDRESS
+$COMPANY_CITY, $COMPANY_STATE
 
-Dear ${HIRING_MANAGER},
+Dear $HM,
 
-I am writing to express my interest in the ${APPLIED_ROLE} role at ${COMPANY}. 
-With my current experience as ${CURRENT_JOB}, and previous roles at ${SECOND_JOB}, and ${THIRD_JOB}, I bring a strong background in ${SKILLS_SOFT}.
+I am writing to express my strong interest in the $APPLIED_ROLE position at $COMPANY.
 
+With experience as Package Handler at FedEx Ground, Record Clerk at KDI Office Technologies, and Welder at Alessandra Misc Metalworks, I bring a proven mix of logistics, technical, and fabrication skills.
 
-This mix gives me several strengths I’m excited to bring to ${COMPANY}:
-  
-- ${BULLET_ONE}.
- 
-- ${BULLET_TWO}.
-  
-- ${BULLET_THREE}. 
-  
-- ${BULLET_FOUR}. 
+Key strengths I offer:
 
-I’m particularly drawn to this position because ${COMPANY}  ${COMPANY_FACT}.
+- $BULLET_ONE
+- $BULLET_TWO
+- $BULLET_THREE
+- $BULLET_FOUR
 
+I’m particularly excited about this role because $COMPANY_FACT.
 
-Thank you for your time and consideration. I would welcome the chance to discuss how my unusual blend of logistics, technical, and fabrication experience can contribute to your team’s success.
-
-
+I would welcome the opportunity to discuss how I can contribute to your team.
 
 Sincerely,
 
 ${NAME_FIRST} ${NAME_LAST}
-EOL
+EOF
 
-cat "$FILE"
-
-
-cat >> $log_file << EOL
-${COMPANY} ${APPLIED_ROLE} ${TODAY}
-EOL
-echo Entry Logged
-
-
+echo "Cover letter ready — $(basename "$FILE")"
