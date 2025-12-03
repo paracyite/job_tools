@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/job_tools/configuration.txt"
 DATA_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/job_tools/data.txt"
 "${EDITOR:-nvim}" "$DATA_FILE"
 
@@ -13,4 +14,4 @@ source "$DATA_FILE"
 ~/Bash/job_tools/to-pdf      && echo "PDFs: OK"
 
 echo "DONE — Your perfectly tailored application is ready:"
-ls -1tr ~/Documents/JOB_APPLICATIONS/Louis_Pantuso_*_*.pdf 2>/dev/null | tail -2 | sed 's/^/   /'
+ls -1tr ~/Documents/JOB_APPLICATIONS/${NAME_FIRST}_${NAME_LAST}_*_*.pdf 2>/dev/null | tail -2 | sed 's/^/   /'
