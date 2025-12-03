@@ -19,19 +19,19 @@ ${NAME_FIRST} ${NAME_LAST}
 ${ADDRESS}
 ${CITY}, ${STATE}
 
-${PHONE}|${EMAIL}
+${PHONE} | ${EMAIL}
 
 $TODAY
 
 $COMPANY
-$COMPANY_ADDRESS
-$COMPANY_CITY, $COMPANY_STATE
+
+$COMPANY_ADDRESS,
+
+$COMPANY_CITY, $COMPANY_STATE, $COMPANY_ZIP
 
 Dear $HM,
 
-I am writing to express my strong interest in the $APPLIED_ROLE position at $COMPANY.
-
-With experience as Package Handler at FedEx Ground, Record Clerk at KDI Office Technologies, and Welder at Alessandra Misc Metalworks, I bring a proven mix of logistics, technical, and fabrication skills.
+With ${INTRO_YEARS} years of ${INTRO_SKILL_1}, ${INTRO_SKILL_2}, ${INTRO_SKILL_3}, and ${INTRO_SKILL_4}, plus a ${INTRO_EXTRA}, I’m ready to ${INTRO_OUTCOME} for $COMPANY from day one. I am writing to express my strong interest in the $APPLIED_ROLE position at $COMPANY.
 
 Key strengths I offer:
 

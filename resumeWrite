@@ -1,89 +1,83 @@
-#!/usr/bin/env bash
-
-set -eo pipefail   # good practice anyway
-
+#!/bin/bash
+set -euo pipefail
 
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/job_tools"
+mkdir -p "$CONFIG_DIR" "$HOME/Documents/JOB_APPLICATIONS"
 
-mkdir -p "$CONFIG_DIR"
+source "$CONFIG_DIR/configuration.txt"
+source "$CONFIG_DIR/data.txt"
 
-
-CONFIG_FILE="$CONFIG_DIR/configuration.txt"
-DATA_FILE="$CONFIG_DIR/data.txt"
-DESTINATION="$HOME/Documents/JOB_APPLICATIONS" 
-mkdir -p "$DESTINATION"
-
-
-source "$CONFIG_FILE"
-source "$DATA_FILE"
+# Default if unset
+APPLIED_ROLE="${APPLIED_ROLE:-Generic}"
 
 ROLE_CLEAN=$(echo "$APPLIED_ROLE" | tr '[:lower:]' '[:upper:]' | tr -s ' ' '_')
-RESUME_NAME="${NAME_FIRST}_${NAME_LAST}_${ROLE_CLEAN}.md"
 
-FILE=$DESTINATION/$RESUME_NAME
+if [[ -z "$ROLE_CLEAN" ]]; then
+    echo "ERROR: APPLIED_ROLE is empty—set it in data.txt or run tailor.txt." >&2
+    exit 1
+fi
 
-echo "Generating Resume" 
+FILE="$HOME/Documents/JOB_APPLICATIONS/${NAME_FIRST}_${NAME_LAST}_${ROLE_CLEAN}.md"
 
 cat > "$FILE" << EOF
-# ${NAME_FIRST} ${NAME_LAST} 
-<div class="contacts"> 
-${CITY}, ${STATE} • ${PHONE} • ${EMAIL} 
-</div>
-
-##
-${SUMMARY} 
-
-
-## Professional Experience
-
-**${CURRENT_JOB_POSITION}**
-${CURRENT_JOB} - ${CURRENT_JOB_CITY}, ${CURRENT_JOB_STATE}   ${CURRENT_START_YEAR}-${CURRENT_END_YEAR}
+---
+name: ${NAME_FIRST} ${NAME_LAST}
+address: ${CITY}, ${STATE}
+phone: ${PHONE}
+email: ${EMAIL}
+---
 
 
+${SUMMARY}
+
+\heading{Professional Experience}
+\jobtitle{${CURRENT_JOB_POSITION}}
+${CURRENT_JOB} - ${CURRENT_JOB_CITY}, ${CURRENT_JOB_STATE} \hfill ${CURRENT_START_YEAR} – ${CURRENT_END_YEAR}
 
 - ${CURRENT_JOB_BULLET_ONE}
+
 - ${CURRENT_JOB_BULLET_TWO}
-- ${CURRENT_JOB_BULLET_THREE}  
 
+- ${CURRENT_JOB_BULLET_THREE}
 
-
-**${SECOND_JOB_POSITION}**
-${SECOND_JOB} - ${SECOND_JOB_CITY}, ${SECOND_JOB_STATE}   ${SECOND_START_YEAR}-${SECOND_END_YEAR}
-
-
+\jobtitle{${SECOND_JOB_POSITION}}
+${SECOND_JOB} - ${SECOND_JOB_CITY}, ${SECOND_JOB_STATE} \hfill ${SECOND_START_YEAR} – ${SECOND_END_YEAR}
 
 - ${SECOND_JOB_BULLET_ONE}
+
 - ${SECOND_JOB_BULLET_TWO}
+
 - ${SECOND_JOB_BULLET_THREE}
 
-**${THIRD_JOB_POSITION}**
-${THIRD_JOB} - ${THIRD_JOB_CITY}, ${THIRD_JOB_STATE}   ${THIRD_START_YEAR}-${THIRD_END_YEAR}
-
+\jobtitle{${THIRD_JOB_POSITION}}
+${THIRD_JOB} - ${THIRD_JOB_CITY}, ${THIRD_JOB_STATE} \hfill ${THIRD_START_YEAR} – ${THIRD_END_YEAR}
 
 - ${THIRD_JOB_BULLET_ONE}
+
 - ${THIRD_JOB_BULLET_TWO}
+
 - ${THIRD_JOB_BULLET_THREE}
 
 
-## Education & Relevant Coursework
-${HSEDU} - ${HIGHSCHOOL} - ${HSGRADYEAR} 
 
-**Relevent Coursework:** ${HSRELCOURSEWORK}
+\heading{Skills \& Other}
 
-## Technical Skills & Strengths
+- ${SKILLS_ONE}
 
-- ${SKILLS_TECH}
-- ${SKILLS_LOGISTICS}
-- ${SKILLS_FABRICATION}
-- ${SKILLS_SOFT}
+- ${SKILLS_TWO}
+
+- ${SKILLS_THREE}
+
+- ${SKILLS_FOUR}
+
+- ${SKILLS_FIVE}
+
+- ${SKILLS_SIX}
+
+- ${SKILLS_SEVEN}
+
+- ${SKILLS_EIGHT}
 
 EOF
 
-
-echo Resume complete!
-echo showing ${RESUME_NAME}
-cat $FILE
-echo -e "\nQuick sanity check:"
-echo "Blank lines before <ul> tags:"
-grep -c -A 2 '<ul>' "$FILE" | cat -A   # shows $ and blank lines
-echo "Ghost-bullet risk: $(tail -20 "$FILE" | grep -c '^$')" blank lines at end
+echo "Resume generated perfectly → $(basename "$FILE")"
