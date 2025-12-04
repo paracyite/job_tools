@@ -49,6 +49,12 @@ Apply takes command line arguments
 
 **Use this mode for mass application** 
 
+I've sort of neglected this at the moment. I was mainly trying to get tailor to work. 
+
+
+
+
+
 ### tailor
 
 This mode opens up an editor of your choose (default is nvim) and allows you to manually configure data.txt
@@ -61,15 +67,27 @@ This mode opens up an editor of your choose (default is nvim) and allows you to 
 ## Things I've added 
 
 Wrapper script that calls both resumeWrite and CoverGen 
-More variables for flexibility. 
+More variables for flexibility. <COMPLETE> 
 
+The process was changed a little bit, I was using weasyprint to generate the final document but it was leaving artifacts. I switched over to latex and I'm getting better results. 
+
+                
 
 ## Things I Need to add to finish this project 
 
-Just the script to convert Markdown to PDF 
+Just the script to convert Markdown to PDF <COMPLETE> 
 
-## Things I forgot to add today 
-Generators for variables I added by hand. 
+An installer script for new machines, It works on my desktop but my laptop requires a bit of legwork. Need to fix asap. 
+
+
+As I put this tool to work, theres a few things I notice immediatly. The edit one page workflow works as inteded, but some people might find it a little slow. 
+
+I might want to include some sort of prompt on the terminal for easy copy paste actions. 
+
+I noticed that when I was altering the bullet points Neovim was getting in the way at points..
+
+
+
 
 
 ## Words from the Author 
